@@ -82,6 +82,3 @@ if __name__ == "__main__":
     
     final_df = pd.concat(dfs)
     final_df.to_csv("./nomic_discord_all.csv")
-    # messages = get_all_channel_messages(channel['id'])
-    # df = build_df(messages, channel)
-    # print(df.iloc[0])
