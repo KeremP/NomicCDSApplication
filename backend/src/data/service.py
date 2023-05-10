@@ -5,6 +5,7 @@ from src.data.schemas import TimeSeriesDataPoint, StaticEvent, Message
 from src.data.constants import STATIC_EVENTS
 from src.data.utils import get_reaction_count, get_joins
 
+
 # TODO: support for resampling at diff freq on frontend
 async def get_member_growth(data: pd.DataFrame, freq: str = "W") -> list[TimeSeriesDataPoint]:
     joins = get_joins(data)
@@ -17,7 +18,7 @@ async def get_member_growth(data: pd.DataFrame, freq: str = "W") -> list[TimeSer
         timestamp = resampled_data.index[i]
         value = resampled_data[i]
         response_data.append(
-            TimeSeriesDataPoint(timestamp=timestamp, value=value)
+            TimeSeriesDataPoint(timestamp=str(timestamp), value=value)
         )
     return response_data
 
