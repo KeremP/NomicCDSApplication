@@ -35,10 +35,14 @@ async def get_top_messages(data: pd.DataFrame, k: int = 5) -> list[Message]:
     top_k = sorted_messages[:k]
 
     response_data = []
-
-    for i, item in enumerate(top_k):
+    for index, row in top_k.iterrows():
+        
+        username = row['user_name']
+        reaction_count = row['reaction_count']
+        timestamp = row['timestamp']
+        content = row['content']
         response_data.append(
-            Message(id=i, user=item['user_name'], reaction_count=item['reaction_count'], timestamp=item['timestamp'])
+            Message(id=int(index), user=username, reactionCount=reaction_count, timestamp=str(timestamp), content=content)
         )
 
     return response_data
@@ -52,8 +56,8 @@ def get_time_to_comm(data: pd.DataFrame):
     sorted_data = sorted_data.loc[sorted_data['time_to_first_comm'] > 0]
 
     return {
-        "median":sorted_data['time_to_first_comm'].median(),
-        "mean": sorted_data['time_to_first_comm'].mean(),
+        "median": int(sorted_data['time_to_first_comm'].median()),
+        "mean": int(sorted_data['time_to_first_comm'].mean()),
     }
 
 def get_lurker_count(data: pd.DataFrame):
@@ -71,8 +75,8 @@ def get_top_communicators(data: pd.DataFrame, k: int = 5):
         username = data.loc[data['user_id'] == top_user_ids.index[i]]['user_name']
         top_comms.append(
             {
-                "user":username,
-                "value": value
+                "user": str(username.values[0]),
+                "value": int(value)
             }
         )
     return top_comms
@@ -81,7 +85,7 @@ async def get_user_stats(data: pd.DataFrame, k: int = 5):
     time_to_comm = get_time_to_comm(data)
     lurker_count = get_lurker_count(data)
     top_comms = get_top_communicators(data, k)
-    total_users = len(data['user_id'].unqiue())
+    total_users = len(data['user_id'].unique())
 
     return {
         "time_to_first_comm_stats":time_to_comm,

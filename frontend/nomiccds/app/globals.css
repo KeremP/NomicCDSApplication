@@ -26,6 +26,7 @@ body {
     rgb(var(--background-start-rgb));
 }
 
-.axis-visx {
-  margin-top: 10px;
+svg{
+  overflow: visible;
 }
+

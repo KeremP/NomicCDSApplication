@@ -11,7 +11,8 @@ class StaticEvent(BaseModel):
     event_type: str # Tweet, NewsEvent
 
 class Message(BaseModel):
-    id: str
+    id: int
     user: str
-    reaction_count: int
+    reactionCount: int
     timestamp: str
+    content: str
