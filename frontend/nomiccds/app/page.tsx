@@ -4,6 +4,9 @@ import Dashboard from './dashboard';
 import Chart from '@/components/chart';
 import { DonutChart } from '@/components/donut';
 import LurkerDonutResponsive from '@/components/lurker_donut';
+import TopMessages from '@/components/top_messages';
+import TimeToCommunicate from '@/components/time_to_comm';
+import SentimentMeter from '@/components/sentiment';
 
 
 const data = [{"timestamp":"2023-02-19","value":1},{"timestamp":"2023-02-26","value":26},{"timestamp":"2023-03-05","value":37},{"timestamp":"2023-03-12","value":32},{"timestamp":"2023-03-19","value":28},{"timestamp":"2023-03-26","value":18},{"timestamp":"2023-04-02","value":5220},{"timestamp":"2023-04-09","value":2688},{"timestamp":"2023-04-16","value":3921},{"timestamp":"2023-04-23","value":2271},{"timestamp":"2023-04-30","value":1266},{"timestamp":"2023-05-07","value":1154},{"timestamp":"2023-05-14","value":301}];
@@ -39,6 +42,17 @@ export default function Home() {
               <LurkerDonutResponsive
                 dataTop={top_comms}
                 dataLurker={lurkerData}
+              />
+            </div>
+            <div className='h-full p-4 rounded-md bg-zinc-800 flex flex-col justify-between'>
+              <TopMessages
+                messages={messageData.slice(0, 3)}
+              />
+              <TimeToCommunicate time={"0:10:00"}/>
+              <SentimentMeter
+                positive={60}
+                negative={20}
+                neutral={20}
               />
             </div>
           </div>

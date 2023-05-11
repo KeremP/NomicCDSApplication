@@ -7,18 +7,21 @@ export type Message = {
     timestamp: string;
     content: string;
 }
+import { truncateString } from "@/lib/utils";
+import { useState } from "react";
 
-const TopMessages = ({messages, width, height}: {messages?:Message[], width: number, height: number}) => {
+const TopMessages = ({messages}: {messages?:Message[]}) => {
 
     return (
-        <div style={{width:width, height:height}} className="overflow-y-auto overflow-x-hidden rounded-md bg-zinc-700 p-4 flex flex-col">
+        <div className="overflow-y-auto overflow-x-hidden h-52 rounded-md bg-zinc-700 p-4 flex flex-col">
             <div className="w-full h-8 flex flex-row items-center">
-                <h2 className="rounded-md bg-zinc-500/50 border border-zinc-100 px-2 text-center">Top Messages</h2>
+                <h2 className="text-sm rounded-md bg-zinc-500/50 border border-zinc-100 px-2 text-center">Top Messages</h2>
             </div>
             <div className="mt-4 flex flex-col gap-2 justify-center">
                 {messages?.map((message, index) =>
                     <Message
                         key={index}
+                        index={index}
                         message={message}
                     />
                 )}
@@ -30,20 +33,15 @@ const TopMessages = ({messages, width, height}: {messages?:Message[], width: num
 
 }
 
-const Message = ({message}:{message:Message}) => {
+const Message = ({message, index}:{message:Message, index:number}) => {
+    const [expand, setExpand] = useState(false);
     return (
-        <div className="w-full flex flex-col gap-2 rounded-md bg-zinc-800 p-2 hover:bg-zinc-400/50">
-            <div className="flex flex-row justify-between">
-            <h4 className="text-xs font-semibold text-white">
-                {message.user}
-            </h4>
-            <span className="text-xs text-white">{message.timestamp}</span>
-
-            </div>
-            <p className="text-xs leading-normal text-white">
-                {message.content}
-            </p>
-            <span className="text-xs font-semibold">Interactions: {message.reactionCount}</span>
+        <div onClick={() => setExpand(!expand)} className="w-full flex flex-row gap-2 rounded-md bg-zinc-800 p-2 hover:bg-zinc-400/50 justify-between">
+            <h2 className="font-semibold text-sm">
+                @{message.user}
+            </h2>
+            <p className="text-xs break-words w-[100px]">{expand ? truncateString(message.content, 60):truncateString(message.content, 10) }</p>
+            <span className="text-sm font-semibold">{message.reactionCount} reacts</span>
         </div>
     )
 }
