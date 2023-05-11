@@ -7,6 +7,7 @@ import LurkerDonutResponsive from '@/components/lurker_donut';
 import TopMessages from '@/components/top_messages';
 import TimeToCommunicate from '@/components/time_to_comm';
 import SentimentMeter from '@/components/sentiment';
+import TopTopics, { Topic} from '@/components/topics';
 
 
 const data = [{"timestamp":"2023-02-19","value":1},{"timestamp":"2023-02-26","value":26},{"timestamp":"2023-03-05","value":37},{"timestamp":"2023-03-12","value":32},{"timestamp":"2023-03-19","value":28},{"timestamp":"2023-03-26","value":18},{"timestamp":"2023-04-02","value":5220},{"timestamp":"2023-04-09","value":2688},{"timestamp":"2023-04-16","value":3921},{"timestamp":"2023-04-23","value":2271},{"timestamp":"2023-04-30","value":1266},{"timestamp":"2023-05-07","value":1154},{"timestamp":"2023-05-14","value":301}];
@@ -19,6 +20,21 @@ const lurkerData = [{user:"lurkers", value:parseInt(((userStats.lurker_count/use
 console.log(lurkerData)
 let growthData = data.map((d) => ({...d, date: new Date(d.timestamp)}));
 let eventData = events.map((d) => ({...d, date: new Date(d.timestamp)}));
+
+const topicData: Topic[] = [
+  {
+    topic:"Test1",
+    messages: messageData
+  },
+  {
+    topic:"Test2",
+    messages: messageData
+  },
+  {
+    topic:"Test2",
+    messages: messageData
+  }
+];
 
 export default function Home() {
 
@@ -53,6 +69,11 @@ export default function Home() {
                 positive={60}
                 negative={20}
                 neutral={20}
+              />
+            </div>
+            <div className='h-full p-4 rounded-md bg-zinc-800'>
+              <TopTopics
+                topics={topicData}
               />
             </div>
           </div>
