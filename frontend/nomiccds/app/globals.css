@@ -30,3 +30,13 @@ svg{
   overflow: visible;
 }
 
+.zoom {
+  animation: hover-scale 5s ease;
+}
+
+
+@keyframes hover-scale {
+  from { stroke-width: 10;}
+  to {stroke-width: 12;}
+}
+
