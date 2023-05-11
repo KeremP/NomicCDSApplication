@@ -68,7 +68,7 @@ export type PieProps = {
   animate?: boolean;
 };
 
-export default function Example({
+export default function LurkerStats({
   width,
   height,
   margin = defaultMargin,
