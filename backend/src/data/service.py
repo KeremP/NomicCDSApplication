@@ -4,7 +4,7 @@ import numpy as np
 from src.data.schemas import TimeSeriesDataPoint, StaticEvent, Message
 from src.data.utils import get_reaction_count, get_joins
 from typing import Union
-
+from nomic import atlas
 
 # TODO: support for resampling at diff freq on frontend
 async def get_member_growth(data: pd.DataFrame, eventData: pd.DataFrame, freq: str = "W") -> dict[str,Union[list[TimeSeriesDataPoint], list[StaticEvent]]]:
@@ -122,6 +122,8 @@ async def get_user_stats(data: pd.DataFrame, k: int = 5):
     }
 
 
-
-
-
+async def get_topics(project_id: str):
+    project = atlas.AtlasProject(project_id=project_id)
+    map = project.maps[0]
+    topic_data = map.get_topic_data()
+    return topic_data[:4]

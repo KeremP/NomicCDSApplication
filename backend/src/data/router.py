@@ -1,10 +1,11 @@
 import os
 from fastapi import APIRouter
-from src.data.service import get_member_growth, get_top_messages, get_user_stats
+from src.data.service import get_member_growth, get_top_messages, get_user_stats, get_topics
 from src.data.schemas import TimeSeriesDataPoint, StaticEvent, Message
 from src.data.utils import load_data, load_events, load_sentiment
 from typing import Union
 
+ATLAST_MAP = "deb7a93e-fe0a-444d-8d4f-c92898b43d90"
 DATA_PATH = os.path.abspath("src/data/nomic_data.csv")
 EVENT_PATH = os.path.abspath("src/data/events.csv")
 SENTIMENT_PATH = os.path.abspath("src/data/nomic_sentiment_data.csv")
@@ -38,3 +39,7 @@ async def user_sentiment():
         "positive":int(SENTIMENT['positive'])
     }
     
+@router.get("/get_topics")
+async def atlas_topics():
+    response = await get_topics(ATLAST_MAP)
+    return response

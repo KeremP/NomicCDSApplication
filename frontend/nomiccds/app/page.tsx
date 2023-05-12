@@ -5,7 +5,7 @@ import LurkerDonutResponsive from '@/components/lurker_donut';
 import TopMessages, { Message } from '@/components/top_messages';
 import TimeToCommunicate from '@/components/time_to_comm';
 import SentimentMeter from '@/components/sentiment';
-import TopTopics, { Topic} from '@/components/topics';
+import TopTopics, { Topic } from '@/components/topics';
 import Sidebar from '@/components/sidebar';
 
 type MemberData = {
@@ -24,6 +24,14 @@ type SentimentResp = {
   positive: number;
   negative: number;
   neutral: number;
+}
+
+type TopicResp = {
+  depth:number;
+  topic:number;
+  _topic_depth_1:string;
+  topic_description:string;
+  topic_short_description:string;
 }
 
 async function getMemberData () {
@@ -62,6 +70,15 @@ async function getUserSentiment () {
   return res.json();
 }
 
+async function getTopics () {
+  const res = await fetch("http://127.0.0.1:8000/data/get_topics");
+  if (!res.ok) {
+    throw new Error("Failed to fetch topics");
+  }
+
+  return res.json();
+}
+
 export default async function Home() {
 
   const memberData: MemberData = await getMemberData();
@@ -78,20 +95,8 @@ export default async function Home() {
   
   const userSentiment: SentimentResp = await getUserSentiment();
 
-  const topicData: Topic[] = [
-    {
-      topic:"Test1",
-      messages: messageData
-    },
-    {
-      topic:"Test2",
-      messages: messageData
-    },
-    {
-      topic:"Test2",
-      messages: messageData
-    }
-  ];
+  const topicData: TopicResp[] = await getTopics();
+  const topics: Topic[] = topicData.map((d) => ({topic:d._topic_depth_1,keywords:d.topic_description, description:d.topic_short_description}))
 
   return (
     <main className="flex min-h-screen h-screen flex-col items-center justify-between py-6 px-8">
@@ -144,7 +149,7 @@ export default async function Home() {
             </div>
             <div className='h-full p-4 rounded-md bg-zinc-800 flex flex-col'>
               <TopTopics
-                topics={topicData}
+                topics={topics}
               />
               <div className='w-full h-full flex justify-center items-center relative'>
                 <div className='absolute top-0 left-0 w-full h-full bg-zinc-800/50 backdrop-blur-sm flex justify-center items-center'>

@@ -37,7 +37,7 @@ const LurkerDonutResponsive = ({dataTop, dataLurker}:{dataTop:DataItem[], dataLu
                     </button>
                 </div>
             </div>
-            <div ref={lurkerRef} className="h-[250px] w-full">
+            <div ref={lurkerRef} className="h-[250px] xl:h-[300px] w-full">
                 <LurkerDonut
                     data={data}
                     parent={lurkerRef}
