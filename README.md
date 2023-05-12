@@ -2,6 +2,7 @@
 
 ## How to run
 `make build` will build a docker container for both the FastAPI backend and NextJS frontend.
+
 `make run` will start both instances. App can be found at http://127.0.0.1:3000
 
 ## Nomic Discord Dashboard built for the Community Data Scientist role @ NomicAI.
