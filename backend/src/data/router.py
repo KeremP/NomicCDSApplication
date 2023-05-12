@@ -1,23 +1,21 @@
 import os
 from fastapi import APIRouter
-from src.data.service import get_member_growth, get_static_events, get_top_messages, get_user_stats
+from src.data.service import get_member_growth, get_top_messages, get_user_stats
 from src.data.schemas import TimeSeriesDataPoint, StaticEvent, Message
-from src.data.utils import load_data
+from src.data.utils import load_data, load_events
+from typing import Union
 
 DATA_PATH = os.path.abspath("src/data/nomic_data.csv")
+EVENT_PATH = os.path.abspath("src/data/events.csv")
 
 DATA = load_data(DATA_PATH)
+EVENTS = load_events(EVENT_PATH)
 
 router = APIRouter()
 
-@router.get("/get_member_growth", response_model=list[TimeSeriesDataPoint])
+@router.get("/get_member_growth", response_model=dict[str,Union[list[TimeSeriesDataPoint], list[StaticEvent]]])
 async def member_growth(freq: str = "W"):
-    response = await get_member_growth(DATA, freq)
-    return response
-
-@router.get("/get_static_events", response_model=list[StaticEvent])
-async def static_events():
-    response = await get_static_events()
+    response = await get_member_growth(DATA, EVENTS, freq)
     return response
 
 @router.get("/get_top_messages", response_model=list[Message])

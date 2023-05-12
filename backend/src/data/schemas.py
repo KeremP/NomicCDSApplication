@@ -6,9 +6,9 @@ class TimeSeriesDataPoint(BaseModel):
     value: int
 
 class StaticEvent(BaseModel):
-    id: int
     timestamp: str
-    event_type: str # Tweet, NewsEvent
+    event: str
+    value: int
 
 class Message(BaseModel):
     id: int

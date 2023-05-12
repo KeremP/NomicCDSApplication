@@ -2,16 +2,17 @@ import os
 import pandas as pd
 import numpy as np
 from src.data.schemas import TimeSeriesDataPoint, StaticEvent, Message
-from src.data.constants import STATIC_EVENTS
 from src.data.utils import get_reaction_count, get_joins
+from typing import Union
 
 
 # TODO: support for resampling at diff freq on frontend
-async def get_member_growth(data: pd.DataFrame, freq: str = "W") -> list[TimeSeriesDataPoint]:
+async def get_member_growth(data: pd.DataFrame, eventData: pd.DataFrame, freq: str = "W") -> dict[str,Union[list[TimeSeriesDataPoint], list[StaticEvent]]]:
     joins = get_joins(data)
     resampled = joins.resample(freq, on="timestamp")
     resampled_data = resampled.count()['id']
-
+    event_data = get_events(resampled_data, eventData)
+    
     response_data = []
 
     for i in range(len(resampled_data)):
@@ -20,10 +21,24 @@ async def get_member_growth(data: pd.DataFrame, freq: str = "W") -> list[TimeSer
         response_data.append(
             TimeSeriesDataPoint(timestamp=str(timestamp), value=value)
         )
-    return response_data
+    return {"memberGrowth":response_data, "events":event_data}
 
-async def get_static_events() -> list[StaticEvent]:
-    return STATIC_EVENTS
+def get_events(joinData: pd.DataFrame, eventData: pd.DataFrame) -> list[StaticEvent]:
+    values = []
+    for _, row in eventData.iterrows():
+        date = row['timestamp']
+        temp_a = joinData.loc[joinData.index < date]
+        temp_b = joinData.loc[joinData.index > date]
+        a = temp_a[-1]
+        b = temp_b[0]
+        value = (a+b)//2
+        values.append(value)
+    out = eventData.copy(deep=True)
+    out['value'] = values
+    return [
+        StaticEvent(timestamp=str(out.iloc[i]['timestamp']), event=out.iloc[i]['event'], value=out.iloc[i]['value']) for i in range(len(out))
+    ]
+    
 
 
 async def get_top_messages(data: pd.DataFrame, k: int = 5) -> list[Message]:

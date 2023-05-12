@@ -26,7 +26,7 @@ def get_unique_user_data(joins: pd.DataFrame):
     users = users.drop_duplicates(subset=['user_id'], keep="first")
     return users
 
-def load_data(path: str):
+def load_data(path: str) -> pd.DataFrame:
     data = pd.read_csv(path, index_col=0)
     data['timestamp'] = pd.to_datetime(data['timestamp'], format="ISO8601")
     data.dropna(subset=['id'], inplace=True)
@@ -36,6 +36,11 @@ def load_data(path: str):
     data['user_name'] = data['author'].apply(get_username)
     merged = data.merge(users, on="user_id", how="inner")
     return merged
+
+def load_events(path: str) -> pd.DataFrame:
+    data = pd.read_csv(path)
+    data['timestamp'] = pd.to_datetime(data['timestamp'], format="ISO8601", utc=True)
+    return data
 
 def get_reaction_count(x: str):
     if type(x) is not str: return 0
