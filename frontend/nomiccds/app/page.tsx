@@ -89,8 +89,8 @@ export default async function Home() {
 
   const userStats: UserStats = await getUserStats();
 
-  const share_of_top_comms = userStats.top_communicators.reduce((acc, d) => acc + d.value, 0);
-  const top_comms = userStats.top_communicators.map((d) => ({...d,value:Math.round((d.value/share_of_top_comms)*100)}))
+  // const share_of_top_comms = userStats.top_communicators.reduce((acc, d) => acc + d.value, 0);
+  // const top_comms = userStats.top_communicators.map((d) => ({...d,value:Math.round((d.value/share_of_top_comms)*100)}))
   const lurkerData = [{user:"lurkers", value:parseInt(((userStats.lurker_count/userStats.total_users)*100).toFixed(2))}, {user:"contributors", value:parseInt((((userStats.total_users - userStats.lurker_count)/userStats.total_users)*100).toFixed(2))}];
   
   const userSentiment: SentimentResp = await getUserSentiment();
@@ -132,7 +132,7 @@ export default async function Home() {
             </div>
             <div className='h-full p-4 rounded-md bg-zinc-800 text-white'>
               <LurkerDonutResponsive
-                dataTop={top_comms}
+                dataTop={userStats.top_communicators}
                 dataLurker={lurkerData}
               />
             </div>

@@ -13,6 +13,7 @@ type DonutChartProps = {
   data: DataItem[];
   onHighlight:(i:number) => void;
   highlighted: number;
+  pct:boolean;
 };
 
 const MARGIN_X = 50;
@@ -28,7 +29,7 @@ export const colors = [
   "#69b3a2",
 ];
 
-export const DonutChart = ({ width, height, data, onHighlight, highlighted }: DonutChartProps) => {
+export const DonutChart = ({ width, height, data, onHighlight, highlighted, pct }: DonutChartProps) => {
   const radius = Math.min(width - 2 * MARGIN_X, height - 2 * MARGIN_Y) / 2;
   const innerRadius = radius / 2;
 
@@ -82,7 +83,7 @@ export const DonutChart = ({ width, height, data, onHighlight, highlighted }: Do
             dominantBaseline="middle"
             fontSize={11}
             >
-            {grp.value}%
+            {grp.value}{pct ? "%":""}
             </text>
         </g>
     );

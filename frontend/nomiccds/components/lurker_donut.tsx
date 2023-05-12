@@ -43,6 +43,7 @@ const LurkerDonutResponsive = ({dataTop, dataLurker}:{dataTop:DataItem[], dataLu
                     parent={lurkerRef}
                     onHighlight={onHighlight}
                     highlighted={highlighted}
+                    pct={label === labels[1]}
                 />
             </div>
             <span className="text-xs font-semibold text-center mb-1">{label}</span>
@@ -60,7 +61,7 @@ const LurkerDonutResponsive = ({dataTop, dataLurker}:{dataTop:DataItem[], dataLu
     )
 }
 
-const LurkerDonut = ({data, parent, onHighlight, highlighted}:{data:DataItem[], parent:RefObject<HTMLDivElement>, onHighlight:(i:number) => void, highlighted: number}) => {
+const LurkerDonut = ({data, parent, onHighlight, highlighted, pct}:{data:DataItem[], parent:RefObject<HTMLDivElement>, onHighlight:(i:number) => void, highlighted: number, pct:boolean}) => {
     const dims = useDimensions(parent);
     return (
         <DonutChart
@@ -69,6 +70,7 @@ const LurkerDonut = ({data, parent, onHighlight, highlighted}:{data:DataItem[], 
             height={dims.height}
             onHighlight={onHighlight}
             highlighted={highlighted}
+            pct={pct}
         />
 
     )
