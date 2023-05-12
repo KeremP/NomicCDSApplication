@@ -29,12 +29,16 @@ def get_events(joinData: pd.DataFrame, eventData: pd.DataFrame) -> list[StaticEv
         date = row['timestamp']
         temp_a = joinData.loc[joinData.index < date]
         temp_b = joinData.loc[joinData.index > date]
-        a = temp_a[-1]
-        b = temp_b[0]
-        value = (a+b)//2
-        values.append(value)
+        try:
+            a = temp_a[-1]
+            b = temp_b[0]
+            value = (a+b)//2
+            values.append(value)
+        except IndexError:
+            values.append(None)
     out = eventData.copy(deep=True)
     out['value'] = values
+    out = out.dropna(subset=['value'])
     return [
         StaticEvent(timestamp=str(out.iloc[i]['timestamp']), event=out.iloc[i]['event'], value=out.iloc[i]['value']) for i in range(len(out))
     ]

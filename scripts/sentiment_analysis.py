@@ -1,4 +1,4 @@
-import requests, os
+import requests, os, re
 from tqdm import tqdm
 from dotenv import load_dotenv
 import pandas as pd
@@ -25,8 +25,15 @@ def load_data(path: str):
     return pd.read_csv(path, index_col=0)
 
 def clean_text(text: str):
+    """
+    Replace newlines with space. Remove any @'s. Remove links. Removes text in [].
+    """
+    text = text.lower()
     text = text.replace("\n", " ")
-    return text.split("> ")[-1]
+    text = re.sub('<.*?>+', '', text)
+    text = re.sub('\[.*?\]', '', text)
+    text = re.sub('https?://\S+|www\.\S+', '', text)
+    return text
 
 def classify(text: str):
     headers = {
@@ -45,9 +52,10 @@ if __name__ == "__main__":
     tokenizer = load_tokenzer(HF_MODEL)
     data['content'] = data['content'].apply(clean_text)
     data['content'] = data['content'].apply(lambda x: truncate_text(x, tokenizer))
+    print(len(data))
     sentiment_array = []
-    for i in tqdm(range(0, len(data), 64)):
-        end = min(i+64, len(data))
+    for i in tqdm(range(0, len(data), 128)):
+        end = min(i+128, len(data))
         batch = data['content'].values[i:end]
         result = classify(batch.tolist())
         sentiment_array+=[r['label'] for r in result]

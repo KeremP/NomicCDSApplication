@@ -5,7 +5,7 @@ from src.data.schemas import TimeSeriesDataPoint, StaticEvent, Message
 from src.data.utils import load_data, load_events, load_sentiment
 from typing import Union
 
-ATLAST_MAP = "deb7a93e-fe0a-444d-8d4f-c92898b43d90"
+ATLAST_MAP = "9d9acf23-67fb-42fb-8290-0cef81cb1eb3"
 DATA_PATH = os.path.abspath("src/data/nomic_data.csv")
 EVENT_PATH = os.path.abspath("src/data/events.csv")
 SENTIMENT_PATH = os.path.abspath("src/data/nomic_sentiment_data.csv")
