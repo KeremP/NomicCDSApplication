@@ -273,7 +273,7 @@ const ChartToolTipContent = ({data, x, y, show}:{data?:Data, x:number, y:number,
 
 const ChartAnnotation = ({event, x, y, show, hide}:{event?: Event, x: number, y: number, show: boolean, hide:() => void}) => {
     return (
-        <div className={`${show ? "" : "hidden"} flex flex-col justify-center fixed w-40 h-14 rounded-md bg-zinc-600/50 backdrop-blur-sm p-2`}
+        <div className={`${show ? "" : "hidden"} flex flex-col justify-center fixed w-40 h-14 rounded-md bg-zinc-600/50 backdrop-blur-sm p-4`}
             style={{
                 top:y,
                 left:x

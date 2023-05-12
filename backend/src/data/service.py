@@ -12,7 +12,7 @@ async def get_member_growth(data: pd.DataFrame, eventData: pd.DataFrame, freq: s
     resampled = joins.resample(freq, on="timestamp")
     resampled_data = resampled.count()['id']
     event_data = get_events(resampled_data, eventData)
-    
+    print(event_data)
     response_data = []
 
     for i in range(len(resampled_data)):
@@ -55,24 +55,36 @@ async def get_top_messages(data: pd.DataFrame, k: int = 5) -> list[Message]:
         username = row['user_name']
         reaction_count = row['reaction_count']
         timestamp = row['timestamp']
-        content = row['content']
+        content = row['content'].split("> ")[-1]
         response_data.append(
             Message(id=int(index), user=username, reactionCount=reaction_count, timestamp=str(timestamp), content=content)
         )
 
     return response_data
 
+def formatTime(time: float):
+    hour = time // 3600
+    seconds = time % 3600
+    minutes = seconds // 60
+    seconds = seconds % 60
+    return "%02d:%02d:%02d" % (hour, minutes, seconds)
+
+
 
 def get_time_to_comm(data: pd.DataFrame):
     data_ex_join_channel = data.loc[data['channel_name'] != "joins"]
-    data_ex_join_channel['time_to_first_comm'] = (data_ex_join_channel['timestamp'] - data_ex_join_channel['join_time']) / np.timedelta64(1, 'm')
+    data_ex_join_channel['time_to_first_comm'] = (data_ex_join_channel['timestamp'] - data_ex_join_channel['join_time']) / np.timedelta64(1, 's')
     sorted_data = data_ex_join_channel.sort_values(by="timestamp")
     sorted_data = sorted_data.drop_duplicates(subset=['user_id'], keep="first")
     sorted_data = sorted_data.loc[sorted_data['time_to_first_comm'] > 0]
 
+    median = round(sorted_data['time_to_first_comm'].median())
+    mean = round(sorted_data['time_to_first_comm'].mean())
+
+
     return {
-        "median": int(sorted_data['time_to_first_comm'].median()),
-        "mean": int(sorted_data['time_to_first_comm'].mean()),
+        "median": formatTime(median),
+        "mean": formatTime(mean),
     }
 
 def get_lurker_count(data: pd.DataFrame):

@@ -13,7 +13,7 @@ EVENTS = load_events(EVENT_PATH)
 
 router = APIRouter()
 
-@router.get("/get_member_growth", response_model=dict[str,Union[list[TimeSeriesDataPoint], list[StaticEvent]]])
+@router.get("/get_member_growth")
 async def member_growth(freq: str = "W"):
     response = await get_member_growth(DATA, EVENTS, freq)
     return response
