@@ -43,7 +43,7 @@ Notes:
 ### Atlas and Top Topics
 - Cleaned and preprocessed messages are uploaded to atlas map (which is embedded in iframe)
 - Top topics are taken from the atlas `map.get_topic_data()` api method (this could be improved by adding more filters/processing/cleaning steps)
-- 
+
 ![Gif of top topics from Nomic Atlas](./images/nomiccds_topics.gif)
 
 ![Gif of embedded Nomic Atlas](./images/nomiccds_atlas.gif)
