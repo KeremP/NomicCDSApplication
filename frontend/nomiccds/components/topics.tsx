@@ -34,7 +34,7 @@ const TopTopics = ({topics}:{topics:Topic[]}) => {
             </h2>
             {
                 topics.map((topic, i) => 
-                    <h2 onClick={() => onSelectTopic(topic.topic, i)} className={`${fontSizes[i]} font-semibold mx-auto my-1 bg-zinc-600/50 rounded-md px-2 cursor-pointer hover:bg-zinc-500/50`}>
+                    <h2 key={`topic-${i}`} onClick={() => onSelectTopic(topic.topic, i)} className={`${fontSizes[i]} font-semibold mx-auto my-1 bg-zinc-600/50 rounded-md px-2 cursor-pointer hover:bg-zinc-500/50`}>
                         {topic.topic}
                     </h2>
                 )
