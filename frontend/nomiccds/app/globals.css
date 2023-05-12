@@ -40,3 +40,26 @@ svg{
   to {stroke-width: 12;}
 }
 
+/* custom scrollbar */
+::-webkit-scrollbar {
+  width: 20px;
+  z-index: 40;
+  position: relative;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #d6dee1;
+  border-radius: 20px;
+  border: 6px solid transparent;
+  background-clip: content-box;
+  z-index: 30;
+  position: relative;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #a8bbbf;
+}

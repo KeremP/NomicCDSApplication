@@ -1,12 +1,13 @@
 import Image from 'next/image';
 
-import Chart from '@/components/chart';
+import Chart, {Data, Event} from '@/components/chart';
 import LurkerDonutResponsive from '@/components/lurker_donut';
 import TopMessages, { Message } from '@/components/top_messages';
 import TimeToCommunicate from '@/components/time_to_comm';
 import SentimentMeter from '@/components/sentiment';
 import TopTopics, { Topic } from '@/components/topics';
 import Sidebar from '@/components/sidebar';
+import GrowthChart from '@/components/growth_chart';
 
 type MemberData = {
   memberGrowth: {timestamp:string, value:number}[];
@@ -34,8 +35,15 @@ type TopicResp = {
   topic_short_description:string;
 }
 
-async function getMemberData () {
-  const res = await fetch("http://127.0.0.1:8000/data/get_member_growth");
+async function getMemberData (freq?: string) {
+  let endpoint: string;
+  if (freq) {
+    endpoint = "http://127.0.0.1:8000/data/get_member_growth?freq="+freq;
+  } 
+  else {
+    endpoint = "http://127.0.0.1:8000/data/get_member_growth";
+  }
+  const res = await fetch(endpoint);
   if (!res.ok) {
     throw new Error("Failed to fetch member growth data");
   }
@@ -61,6 +69,16 @@ async function getUserStats () {
   return res.json();
 }
 
+async function fetchAllMemberDataFreq() {
+  const weekly = getMemberData();
+  const monthly = getMemberData("M");
+  const daily = getMemberData("D")
+  const results = await Promise.all(
+    [weekly, monthly, daily]
+  );
+  return {weekly:results[0], monthly:results[1], daily:results[2]}
+}
+
 async function getUserSentiment () {
   const res = await fetch("http://127.0.0.1:8000/data/get_user_sentiment");
   if (!res.ok) {
@@ -79,11 +97,35 @@ async function getTopics () {
   return res.json();
 }
 
+const mapMemberData = (data: MemberData["memberGrowth"]) => {
+  return data.map((d) => ({...d, date: new Date(d.timestamp)}));
+}
+
+const mapEventData = (data:MemberData['events']) => {
+  return data.map((d) => ({...d, date: new Date(d.timestamp)}));
+}
+
 export default async function Home() {
 
-  const memberData: MemberData = await getMemberData();
-  const growthData = memberData.memberGrowth.map((d) => ({...d, date: new Date(d.timestamp)}));
-  const eventData = memberData.events.map((d) => ({...d, date: new Date(d.timestamp)}));
+  const memberData: {weekly:MemberData, monthly:MemberData, daily:MemberData} = await fetchAllMemberDataFreq();
+  
+  const growthData = {
+    weekly:mapMemberData(memberData.weekly.memberGrowth),
+    monthly:mapMemberData(memberData.monthly.memberGrowth),
+    daily:mapMemberData(memberData.daily.memberGrowth)
+  };
+
+  const eventData: {
+    weekly: Event[],
+    monthly: Event[],
+    daily: Event[]
+  } = {
+    weekly:mapEventData(memberData.weekly.events),
+    monthly:mapEventData(memberData.monthly.events),
+    daily:mapEventData(memberData.daily.events)
+  }
+  // const growthData = memberData.memberGrowth.map((d) => ({...d, date: new Date(d.timestamp)}));
+  // const eventData = memberData.events.map((d) => ({...d, date: new Date(d.timestamp)}));
 
   const messageData: Message[] = await getTopMessages();
 
@@ -110,25 +152,13 @@ export default async function Home() {
 
         <div className='w-[90%] h-full px-8'>
           <div className='grid grid-cols-3 gap-x-4 h-full'>
-            <div className='col-span-3 h-[300px] rounded-md bg-zinc-900 p-8 flex flex-col'>
-              <div className='flex flex-row justify-between w-full items-center'>
-                <h2 className='text-lg font-semibold'>Weekly user growth</h2>
-                <div className='flex flex-row gap-x-2'>
-                  <div className='flex flex-row items-center justify-center gap-x-1'>
-                    <div className='w-2 h-2 rounded-full bg-blue-500'></div>
-                    <span className='text-xs'>event</span>
-                  </div>
-                  <div className='flex flex-row items-center justify-center gap-x-1'>
-                    <div className='w-2 h-2 rounded-full bg-gray-400'></div>
-                    <span className='text-xs'>datapoint</span>
-                  </div>
-                </div>
-              </div>
-              
-              <Chart
+            <div className='col-span-3 h-[300px] rounded-md bg-zinc-900 p-8 flex flex-col relative'>
+              <GrowthChart
                 data={growthData}
                 events={eventData}
               />
+              <span className='absolute bottom-2 left-6 text-xs font-light'>Tip: Click on an event to see more info. Events are sourced from Twitter.</span>
+
             </div>
             <div className='h-full p-4 rounded-md bg-zinc-800 text-white'>
               <LurkerDonutResponsive

@@ -4,7 +4,7 @@ import { useDimensions } from "@/hooks/useDimensions";
 import { DonutChart, DataItem, colors } from "./donut";
 import React, { RefObject, useState } from "react";
 
-const labels = ["Top Disc Contributors", "Lurker:Contributor Ratio"];
+const labels = ["Top Disc Contributors (# of msgs)", "Lurker:Contributor Ratio"];
 
 const LurkerDonutResponsive = ({dataTop, dataLurker}:{dataTop:DataItem[], dataLurker:DataItem[]}) => {
     const [data, setData] = useState<DataItem[]>(dataTop);
@@ -30,7 +30,7 @@ const LurkerDonutResponsive = ({dataTop, dataLurker}:{dataTop:DataItem[], dataLu
                 <h2 className="font-semibold">User stats</h2>
                 <div className="flex flex-row gap-x-1">
                     <button onClick={() => onChangeData(dataTop, labels[0])} className="text-xs text-white bg-transparent border border-white px-2 py-1 rounded-lg">
-                        Top %
+                        Top Msgs
                     </button>
                     <button onClick={() => onChangeData(dataLurker, labels[1])} className="text-xs text-white bg-transparent border border-white px-2 py-1 rounded-lg">
                         Lurker %

@@ -1,4 +1,4 @@
-import { LayoutDashboard, Map } from "lucide-react";
+import { LayoutDashboard, Map, User } from "lucide-react";
 import Link from "next/link";
 
 const Sidebar = ({active}:{active:string}) => {
@@ -12,8 +12,8 @@ const Sidebar = ({active}:{active:string}) => {
             </h4>
 
             <div className="w-full flex flex-col gap-y-2">
-                <div className="rounded-full w-20 h-20 bg-zinc-400 mx-auto mt-20">
-
+                <div className="rounded-full w-20 h-20 bg-zinc-400 mx-auto mt-20 flex justify-center items-center">
+                    <User height={40} width={40}/>
                 </div>
                 <span className="text-sm text-center">Username</span>
                 <button disabled className="bg-zinc-800 border border-zinc-600 rounded-lg px-2 mx-auto text-xs disabled:opacity-80">Settings</button>

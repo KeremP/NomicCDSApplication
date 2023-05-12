@@ -21,15 +21,14 @@ export type Event = {
     value: number;
 }
 
-const Chart = ({data, events}: { data: Data[], events: Event[] }) => {
+
+const Chart = ({data, events}: {data:Data[], events:Event[]}) => {
 
     const collatedData = data.concat(events);
     
     collatedData.sort((a, b) => {
         return ( a.date<b.date ? -1 : a.date>b.date ? 1: 0 )
     });
-
-    
 
     const [showTooltip, setShowTooltip] = useState(false);
     const [dataPoint, setDataPoint] = useState<Data>();
@@ -109,7 +108,7 @@ const Chart = ({data, events}: { data: Data[], events: Event[] }) => {
 
                 {data.map((day, i) =>
                     <g key={i} className="overflow-visible font-medium text-gray-500">
-                        <text
+                        {data.length > 4 && i%4===0 && <text
                             x={`${xScale(day.date)}%`}
                             y="100%"
                             textAnchor={
@@ -119,8 +118,8 @@ const Chart = ({data, events}: { data: Data[], events: Event[] }) => {
                             className="@sm:inline hidden text-xs"
                         >
                             {format(day.date, "LLL")}-{format(day.date, "d")}
-                        </text>
-                        <text
+                        </text>}
+                        {data.length > 4 && i%4===0&&<text
                             x={`${xScale(day.date)}%`}
                             y="100%"
                             textAnchor={
@@ -130,7 +129,29 @@ const Chart = ({data, events}: { data: Data[], events: Event[] }) => {
                             className="@sm:hidden text-xs"
                         >
                             {format(day.date, "LLL")}-{format(day.date, "d")}
-                        </text>
+                        </text>}
+                        {data.length <= 4 && <text
+                            x={`${xScale(day.date)}%`}
+                            y="100%"
+                            textAnchor={
+                                i===0 ? "start" : i === data.length - 1 ? "end" : "middle"
+                            }
+                            fill="currentColor"
+                            className="@sm:inline hidden text-xs"
+                        >
+                            {format(day.date, "LLL")}-{format(day.date, "d")}
+                        </text>}
+                        {data.length <= 4 &&<text
+                            x={`${xScale(day.date)}%`}
+                            y="100%"
+                            textAnchor={
+                                i===0 ? "start" : i === data.length - 1 ? "end" : "middle"
+                            }
+                            fill="currentColor"
+                            className="@sm:hidden text-xs"
+                        >
+                            {format(day.date, "LLL")}-{format(day.date, "d")}
+                        </text>}
                     </g>
                 )}
             </svg>
@@ -265,7 +286,7 @@ const ChartToolTipContent = ({data, x, y, show}:{data?:Data, x:number, y:number,
                     left:x
                 }}
             >
-                <span className="text-black text-sm">{data?.value}</span>
+                <span className="text-black text-sm">{data?.date.toLocaleDateString("en-us", {year:"numeric",month:"numeric",day:"numeric"})}, {data?.value}</span>
                 
             </div>
         )

@@ -36,11 +36,11 @@ const TopMessages = ({messages}: {messages?:Message[]}) => {
 const Message = ({message, index}:{message:Message, index:number}) => {
     const [expand, setExpand] = useState(false);
     return (
-        <div onClick={() => setExpand(!expand)} className="w-full flex flex-row gap-2 rounded-md bg-zinc-800 p-2 hover:bg-zinc-400/50 justify-between">
+        <div onClick={() => setExpand(!expand)} className="cursor-pointer w-full flex flex-row gap-2 rounded-md bg-zinc-800 p-2 hover:bg-zinc-400/50 justify-between">
             <h2 className="font-semibold text-sm">
                 @{message.user}
             </h2>
-            <p className="text-xs break-words w-[100px]">{expand ? truncateString(message.content, 60):truncateString(message.content, 10) }</p>
+            <p className="text-xs break-words w-[100px]">{expand ? message.content:truncateString(message.content, 10) }</p>
             <span className="text-sm font-semibold">{message.reactionCount} reacts</span>
         </div>
     )

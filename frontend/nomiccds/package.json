@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@radix-ui/react-select": "^1.2.1",
     "@radix-ui/react-tooltip": "^1.0.5",
     "@react-spring/web": "^9.7.2",
     "@types/d3": "^7.4.0",
