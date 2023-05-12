@@ -82,7 +82,7 @@ export const DonutChart = ({ width, height, data, onHighlight, highlighted }: Do
             dominantBaseline="middle"
             fontSize={11}
             >
-            {grp.value}
+            {grp.value}%
             </text>
         </g>
     );

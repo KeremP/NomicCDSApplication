@@ -4,11 +4,17 @@ import { useDimensions } from "@/hooks/useDimensions";
 import { DonutChart, DataItem, colors } from "./donut";
 import React, { RefObject, useState } from "react";
 
-
+const labels = ["Top Disc Contributors", "Lurker:Contributor Ratio"];
 
 const LurkerDonutResponsive = ({dataTop, dataLurker}:{dataTop:DataItem[], dataLurker:DataItem[]}) => {
     const [data, setData] = useState<DataItem[]>(dataTop);
-    
+    const [label, setLabel] = useState(labels[0]);
+
+    const onChangeData = (data: DataItem[], label: string) => {
+        setData(data);
+        setLabel(label);
+    }
+
     const lurkerRef = React.createRef<HTMLDivElement>();
     const [highlighted, setHighlighted] = useState(0);
     const onHighlight = (i:number) => {
@@ -23,15 +29,15 @@ const LurkerDonutResponsive = ({dataTop, dataLurker}:{dataTop:DataItem[], dataLu
             <div className="flex flex-row justify-between w-full">
                 <h2 className="font-semibold">User stats</h2>
                 <div className="flex flex-row gap-x-1">
-                    <button onClick={() => setData(dataTop)} className="text-xs text-white bg-transparent border border-white px-2 py-1 rounded-lg">
+                    <button onClick={() => onChangeData(dataTop, labels[0])} className="text-xs text-white bg-transparent border border-white px-2 py-1 rounded-lg">
                         Top %
                     </button>
-                    <button onClick={() => setData(dataLurker)} className="text-xs text-white bg-transparent border border-white px-2 py-1 rounded-lg">
+                    <button onClick={() => onChangeData(dataLurker, labels[1])} className="text-xs text-white bg-transparent border border-white px-2 py-1 rounded-lg">
                         Lurker %
                     </button>
                 </div>
             </div>
-            <div ref={lurkerRef} className="h-[270px] w-full">
+            <div ref={lurkerRef} className="h-[250px] w-full">
                 <LurkerDonut
                     data={data}
                     parent={lurkerRef}
@@ -39,6 +45,7 @@ const LurkerDonutResponsive = ({dataTop, dataLurker}:{dataTop:DataItem[], dataLu
                     highlighted={highlighted}
                 />
             </div>
+            <span className="text-xs font-semibold text-center mb-1">{label}</span>
             <div className="w-full flex flex-wrap gap-x-4 justify-center">
                 {
                     data.map((d, i) => 

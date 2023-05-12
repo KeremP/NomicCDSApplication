@@ -42,6 +42,10 @@ def load_events(path: str) -> pd.DataFrame:
     data['timestamp'] = pd.to_datetime(data['timestamp'], format="ISO8601", utc=True)
     return data
 
+def load_sentiment(path: str) -> pd.DataFrame:
+    data = pd.read_csv(path, index_col=0)
+    return data['sentiment'].value_counts()
+
 def get_reaction_count(x: str):
     if type(x) is not str: return 0
     x = x.replace("'",'"')
