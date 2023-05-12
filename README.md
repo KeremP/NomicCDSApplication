@@ -23,6 +23,9 @@ Notes:
 
 ## Demo
 
+![Preview of dashboard app](./images/dashboard.png)
+
+
 ### Member Growth
 - Member growth is based on dedupped messages from the "joins" channel as a proxy for new member joins
 - Events are pulled from twitter and saved as a separate dataframe
